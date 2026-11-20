@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend Mentor | NEONCORE — Gamer sign-up form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@800&display=swap" rel="stylesheet">
+  <style>
+/* ==========================================================================
+   Design Tokens
+   ========================================================================== */
+:root {
+  /* Colors */
+  --neutral-950: hsl(214, 37%, 4%);
+  --neutral-900: hsl(210, 39%, 7%);
+  --neutral-800: hsl(211, 30%, 13%);
+  --neutral-700: hsl(211, 22%, 24%);
+  --neutral-600: hsl(210, 18%, 42%);
+  --neutral-500: hsl(211, 14%, 50%);
+  --neutral-400: hsl(211, 13%, 55%);
+  --neutral-300: hsl(211, 18%, 68%);
+  --neutral-100: hsl(208, 49%, 92%);
+  --neutral-50: hsl(204, 60%, 97%);
+
+  --lime-500: hsl(77, 90%, 59%);
+  --lime-700: hsl(77, 67%, 39%);
+  --red-400: hsl(4, 100%, 74%);
+  --amber-400: hsl(40, 100%, 65%);
+  --navy-950: hsl(214, 60%, 2%);
+
+  --lime-alpha-60: hsl(77, 90%, 59%, 0.6);
+  --lime-alpha-40: hsl(77, 90%, 59%, 0.4);
+  --navy-alpha-80: hsl(214, 60%, 2%, 0.8);
+  --navy-alpha-60: hsl(214, 60%, 2%, 0.6);
+
+  /* Typography */
+  --font-display: "Orbitron", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Spacing (4px scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+}
+
+/* ==========================================================================
+   Reset & Base
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+html {
+  color-scheme: dark;
+  scrollbar-color: var(--neutral-700) var(--neutral-950);
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--neutral-950);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neutral-700);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-600);
+}
+
+::selection {
+  background: var(--lime-500);
+  color: var(--navy-950);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--neutral-950);
+  color: var(--neutral-100);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-lime {
+  color: var(--lime-500);
+}
+
+/* ==========================================================================
+   Backdrop Pattern
+   ========================================================================== */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.backdrop-pattern {
+  position: absolute;
+  width: 960px;
+  height: 960px;
+  top: 50%;
+  right: -240px;
+  transform: translateY(-50%);
+  opacity: 0.7;
+}
+
+/* ==========================================================================
+   Page Layout (Desktop-first / Responsive)
+   ========================================================================== */
+.page-layout {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-6);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 480px;
+  align-items: center;
+  gap: var(--space-16);
+  flex: 1;
+}
+
+/* ==========================================================================
+   Brand Column & Operator ID Readout
+   ========================================================================== */
+.brand-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.brand-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-logo-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-logo-link:focus-visible {
+  outline: 2px solid var(--lime-500);
+  outline-offset: 4px;
+}
+
+.mobile-ready-badge {
+  display: none;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--neutral-400);
+}
+
+.mobile-ready-badge.is-ready {
+  color: var(--lime-500);
+}
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 72px;
+  line-height: 80px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--neutral-100);
+}
+
+.hero-slashes {
+  color: var(--lime-500);
+}
+
+.hero-subtitle {
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--neutral-300);
+}
+
+.operator-readout {
+  border-top: 1px solid var(--neutral-800);
+  padding-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.readout-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.readout-label {
+  color: var(--neutral-400);
+}
+
+.readout-count {
+  color: var(--neutral-400);
+  transition: color 0.15s ease;
+}
+
+.readout-count.is-ready {
+  color: var(--lime-500);
+}
+
+.readout-callsign {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 0.04em;
+  color: var(--neutral-100);
+  margin-bottom: var(--space-2);
+  word-break: break-word;
+}
+
+.readout-callsign.is-unassigned {
+  text-transform: uppercase;
+  color: var(--neutral-400);
+}
+
+.readout-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.readout-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.readout-key {
+  color: var(--neutral-400);
+  flex-shrink: 0;
+}
+
+.readout-dots {
+  flex: 1;
+  border-bottom: 1px dotted var(--neutral-700);
+  height: 1px;
+  transform: translateY(1px);
+}
+
+.readout-status {
+  color: var(--neutral-400);
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.readout-status.is-ok,
+.readout-status.is-locked {
+  color: var(--neutral-100);
+}
+
+.readout-status.is-error {
+  color: var(--red-400);
+}
+
+/* ==========================================================================
+   Form Panel & Corner Brackets
+   ========================================================================== */
+.panel {
+  position: relative;
+  background-color: var(--neutral-900);
+  border: 1px solid var(--neutral-800);
+  padding: var(--space-8);
+}
+
+.panel.is-shaking {
+  animation: panel-shake 0.36s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes panel-shake {
+  10%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 80% {
+    transform: translateX(4px);
+  }
+  30%, 50%, 70% {
+    transform: translateX(-6px);
+  }
+  40%, 60% {
+    transform: translateX(6px);
+  }
+}
+
+.panel-corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.panel-corner--tl {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--lime-500);
+  border-left: 2px solid var(--lime-500);
+}
+
+.panel-corner--br {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--lime-500);
+  border-right: 2px solid var(--lime-500);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--neutral-800);
+}
+
+.panel-title {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--neutral-100);
+}
+
+.panel-meta {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--neutral-400);
+}
+
+.panel-meta--mobile {
+  display: none;
+}
+
+/* ==========================================================================
+   Form Fields & Inputs
+   ========================================================================== */
+#signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field-label {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--neutral-300);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: fit-content;
+}
+
+.label-prefix {
+  color: var(--lime-500);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 var(--space-10) 0 var(--space-4);
+  background-color: var(--neutral-950);
+  border: 1px solid var(--neutral-700);
+  color: var(--neutral-100);
+  font-size: 16px;
+  line-height: 24px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-wrapper--password .field-input {
+  padding-right: 76px;
+}
+
+.field-input.is-masked {
+  letter-spacing: 0.16em;
+}
+
+.field-input::placeholder {
+  color: var(--neutral-500);
+  letter-spacing: normal;
+}
+
+.field-input:hover:not(:disabled) {
+  border-color: var(--neutral-500);
+}
+
+.field-input:focus {
+  outline: 2px solid var(--lime-500);
+  outline-offset: 2px;
+  border-color: var(--lime-500);
+}
+
+.field-input:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Autofill dark theme override */
+.field-input:-webkit-autofill,
+.field-input:-webkit-autofill:hover,
+.field-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--neutral-100);
+  -webkit-box-shadow: 0 0 0 1000px var(--neutral-950) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Error & Valid input states */
+.field-group.is-invalid .field-input {
+  border-color: var(--red-400);
+}
+
+.field-group.is-invalid .field-input:focus {
+  outline-color: var(--red-400);
+  border-color: var(--red-400);
+}
+
+.field-valid-icon {
+  position: absolute;
+  right: var(--space-3);
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.input-wrapper--password .field-valid-icon {
+  right: 48px;
+}
+
+.field-group.is-valid .field-valid-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Show/Hide Password Button */
+.toggle-password-btn {
+  position: absolute;
+  right: 4px;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--neutral-300);
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.toggle-password-btn:hover:not(:disabled) {
+  background-color: var(--neutral-800);
+}
+
+.toggle-password-btn:focus-visible {
+  outline: 2px solid var(--lime-500);
+  outline-offset: 0;
+}
+
+.toggle-password-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Hints & Errors */
+.field-hint {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--neutral-400);
+}
+
+.field-error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--red-400);
+}
+
+.field-error img {
+  flex-shrink: 0;
+  margin-top: 0;
+}
+
+.caps-warning {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--amber-400);
+}
+
+/* ==========================================================================
+   Password Strength Meter
+   ========================================================================== */
+.strength-meter {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+
+.strength-segment {
+  height: 3px;
+  background-color: var(--neutral-700);
+  transition: background-color 0.2s ease;
+}
+
+.strength-meter[data-strength="1"] .strength-segment:nth-child(1) {
+  background-color: var(--red-400);
+}
+
+.strength-meter[data-strength="2"] .strength-segment:nth-child(-n+2) {
+  background-color: var(--amber-400);
+}
+
+.strength-meter[data-strength="3"] .strength-segment:nth-child(-n+3) {
+  background-color: var(--lime-500);
+}
+
+.strength-meter[data-strength="4"] .strength-segment {
+  background-color: var(--lime-500);
+}
+
+.password-meta-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.strength-label {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.strength-label[data-strength="1"] {
+  color: var(--red-400);
+}
+
+.strength-label[data-strength="2"] {
+  color: var(--amber-400);
+}
+
+.strength-label[data-strength="3"],
+.strength-label[data-strength="4"] {
+  color: var(--lime-500);
+}
+
+/* ==========================================================================
+   Terms Checkbox & Links
+   ========================================================================== */
+.field-group--terms {
+  margin-top: var(--space-1);
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.terms-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin: 0;
+  background-color: var(--neutral-950);
+  border: 1px solid var(--neutral-600);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.terms-checkbox:hover:not(:disabled) {
+  border-color: var(--lime-500);
+}
+
+.terms-checkbox:focus-visible {
+  outline: 2px solid var(--lime-500);
+  outline-offset: 2px;
+}
+
+.terms-checkbox:checked {
+  background-color: var(--lime-500);
+  border-color: var(--lime-500);
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22none%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20stroke%3D%22%23060a0e%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%222%22%20d%3D%22M13.334%204%206%2011.333%202.667%208%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 16px 16px;
+}
+
+.field-group.is-invalid .terms-checkbox {
+  border-color: var(--red-400);
+}
+
+.terms-checkbox:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.terms-label {
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--neutral-300);
+  cursor: pointer;
+}
+
+.link-inline {
+  color: var(--lime-500);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--lime-alpha-60);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.link-inline:hover {
+  color: var(--neutral-50);
+  border-bottom-color: var(--neutral-50);
+}
+
+.link-inline:focus-visible {
+  outline: 2px solid var(--lime-500);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Buttons & Loading State
+   ========================================================================== */
+.btn-primary {
+  width: 100%;
+  height: 48px;
+  padding: 0 var(--space-6);
+  background-color: var(--lime-500);
+  color: var(--navy-950);
+  border: 1px solid var(--lime-500);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--neutral-50);
+  border-color: var(--neutral-50);
+  box-shadow: 0 0 20px var(--lime-alpha-40);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--lime-500);
+  outline-offset: 2px;
+}
+
+.btn-primary.is-loading {
+  background-color: var(--neutral-950);
+  color: var(--lime-500);
+  border-color: var(--lime-500);
+  cursor: wait;
+}
+
+.login-prompt {
+  text-align: center;
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--neutral-300);
+}
+
+/* ==========================================================================
+   Success View
+   ========================================================================== */
+.success-view {
+  padding: var(--space-16) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
+.success-icon-wrap {
+  margin-bottom: var(--space-2);
+}
+
+.hex-check-svg {
+  display: block;
+}
+
+.hex-outline {
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+  animation: draw-stroke 0.55s ease forwards;
+}
+
+.hex-tick {
+  stroke-dasharray: 32;
+  stroke-dashoffset: 32;
+  animation: draw-stroke 0.35s 0.35s ease forwards;
+}
+
+@keyframes draw-stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.success-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--neutral-100);
+}
+
+.success-title:focus {
+  outline: 2px solid var(--lime-500);
+  outline-offset: 4px;
+}
+
+.success-message {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--neutral-300);
+  margin-bottom: var(--space-2);
+}
+
+/* ==========================================================================
+   Attribution Footer
+   ========================================================================== */
+.attribution {
+  position: relative;
+  z-index: 1;
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+  color: var(--neutral-500);
+  padding: var(--space-4) var(--space-6) var(--space-6);
+}
+
+.attribution a {
+  color: var(--neutral-300);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--neutral-600);
+}
+
+.attribution a:hover {
+  color: var(--lime-500);
+  border-bottom-color: var(--lime-500);
+}
+
+.attribution a:focus-visible {
+  outline: 2px solid var(--lime-500);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints (Tablet & Mobile)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .page-layout {
+    grid-template-columns: 1fr;
+    max-width: 560px;
+    gap: var(--space-8);
+    padding: var(--space-8) var(--space-6);
+  }
+
+  .backdrop-pattern {
+    right: -380px;
+    opacity: 0.45;
+  }
+
+  .brand-column {
+    gap: var(--space-6);
+  }
+
+  .mobile-ready-badge {
+    display: inline-block;
+  }
+
+  .hero-title {
+    font-size: 40px;
+    line-height: 48px;
+  }
+
+  .operator-readout {
+    padding-top: var(--space-4);
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .readout-top {
+    width: auto;
+  }
+
+  .readout-count,
+  .readout-list {
+    display: none;
+  }
+
+  .readout-callsign {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.16em;
+    margin-bottom: 0;
+    text-align: right;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-layout {
+    padding: var(--space-6) var(--space-4);
+    gap: var(--space-6);
+  }
+
+  .hero-copy {
+    gap: var(--space-3);
+  }
+
+  .hero-title {
+    font-size: 36px;
+    line-height: 40px;
+  }
+
+  .hero-subtitle {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .panel {
+    padding: var(--space-6) var(--space-5);
+  }
+
+  .panel-meta--desktop {
+    display: none;
+  }
+
+  .panel-meta--mobile {
+    display: inline;
+  }
+
+  .success-view {
+    padding: var(--space-8) 0;
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .hex-outline,
+  .hex-tick {
+    stroke-dashoffset: 0;
+  }
+}
+
+  </style>
+
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true">
+    <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22960%22%20height%3D%22960%22%20fill%3D%22none%22%20viewBox%3D%220%200%20960%20960%22%3E%3Cpath%20stroke%3D%22%2317212b%22%20d%3D%22M950.4%20480%20715.2%20887.376H244.8L9.6%20480%20244.8%2072.624h470.4z%22%2F%3E%3Cpath%20stroke%3D%22%2317212b%22%20d%3D%22M806.4%20480%20643.2%20762.672H316.8L153.6%20480l163.2-282.672h326.4z%22%2F%3E%3Cpath%20stroke%3D%22%23bff538%22%20d%3D%22m662.4%20480-91.2%20157.968H388.8L297.6%20480l91.2-157.968h182.4z%22%20opacity%3D%22.56%22%2F%3E%3C%2Fsvg%3E" alt="" class="backdrop-pattern">
+  </div>
+
+  <main class="page-layout">
+    <!-- Brand column starts -->
+    <section class="brand-column" aria-labelledby="hero-heading">
+      <header class="brand-header">
+        <a href="#" class="brand-logo-link" aria-label="NEONCORE home">
+          <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22169%22%20height%3D%2232%22%20fill%3D%22none%22%20viewBox%3D%220%200%20169%2032%22%3E%3Cpath%20stroke%3D%22%23bff538%22%20stroke-width%3D%221.5%22%20d%3D%22m30%2016-7%2012.12H9L2%2016%209%203.88h14z%22%2F%3E%3Cpath%20fill%3D%22%23bff538%22%20d%3D%22m21%2016-2.5%204.33h-5L11%2016l2.5-4.33h5z%22%2F%3E%3Cpath%20fill%3D%22%23e1ebf5%22%20d%3D%22M44.896%2022V10.48h2.448l6.736%208.032V10.48h2.336V22h-2.448L47.2%2013.936V22zM60.8%2022V10.48h10.624v2.32h-8.288v2.272h6.672v2.336h-6.672v2.272h8.288V22zm16.738%200q-.64%200-1.168-.304a2.6%202.6%200%200%201-.832-.832%202.3%202.3%200%200%201-.304-1.168v-6.912q0-.64.304-1.152.32-.528.832-.832a2.2%202.2%200%200%201%201.168-.32h6.912a2.1%202.1%200%200%201%201.136.32q.528.304.848.832.32.511.32%201.152v6.912q0%20.64-.32%201.168a2.5%202.5%200%200%201-.848.832Q85.074%2022%2084.45%2022zm.096-2.32h6.688q.048%200%20.064-.016a.1.1%200%200%200%20.032-.08v-6.688q0-.048-.032-.064-.016-.032-.064-.032h-6.688a.1.1%200%200%200-.08.032q-.016.015-.016.064v6.688q0%20.048.016.08.032.015.08.016M91.076%2022V10.48h2.448l6.736%208.032V10.48h2.336V22h-2.448l-6.768-8.064V22zm18.176%200a2.3%202.3%200%200%201-1.168-.304%202.6%202.6%200%200%201-.832-.832%202.3%202.3%200%200%201-.304-1.168v-6.912q0-.64.304-1.152.32-.528.832-.832.528-.32%201.168-.32h9.184v2.32h-8.64a.54.54%200%200%200-.4.144q-.144.128-.144.4v5.792q0%20.256.144.4.145.144.4.144h8.64V22zm15.685%200q-.64%200-1.168-.304a2.6%202.6%200%200%201-.832-.832%202.3%202.3%200%200%201-.304-1.168v-6.912q0-.64.304-1.152.32-.528.832-.832a2.2%202.2%200%200%201%201.168-.32h6.912q.623%200%201.136.32.527.304.848.832.32.511.32%201.152v6.912q0%20.64-.32%201.168a2.54%202.54%200%200%201-.848.832q-.513.304-1.136.304zm.096-2.32h6.688q.048%200%20.064-.016a.1.1%200%200%200%20.032-.08v-6.688q0-.048-.032-.064-.016-.032-.064-.032h-6.688a.1.1%200%200%200-.08.032q-.016.015-.016.064v6.688q0%20.048.016.08.032.015.08.016M147.531%2022l-3.408-4.064h3.024l2.816%203.344V22zm-9.056%200V10.496h9.2q.639%200%201.152.32.527.304.848.832t.32%201.152v3.04q0%20.624-.32%201.152a2.54%202.54%200%200%201-.848.832%202.2%202.2%200%200%201-1.152.304l-6.896.016V22zm2.4-6.192h6.688q.048%200%20.064-.016.032-.032.032-.064v-2.832q0-.048-.032-.064-.016-.032-.064-.032h-6.688a.1.1%200%200%200-.08.032q-.016.015-.016.064v2.832q0%20.032.016.064.032.015.08.016M154.27%2022V10.48h10.624v2.32h-8.288v2.272h6.672v2.336h-6.672v2.272h8.288V22z%22%2F%3E%3C%2Fsvg%3E" alt="NEONCORE" class="brand-logo" width="169" height="32">
+        </a>
+        <span class="mobile-ready-badge" id="mobile-ready-badge" aria-hidden="true">0/5 ready</span>
+      </header>
+
+      <div class="hero-copy">
+        <h1 id="hero-heading" class="hero-title">
+          <span class="hero-slashes" aria-hidden="true">//</span> Join the<br>nexus
+        </h1>
+        <p class="hero-subtitle">Initialize your NEONCORE identity</p>
+      </div>
+
+      <div class="operator-readout" aria-label="Operator ID status">
+        <div class="readout-top">
+          <span class="readout-label">Operator ID</span>
+          <span class="readout-count" id="desktop-ready-count">0/5 ready</span>
+        </div>
+
+        <div class="readout-callsign is-unassigned" id="readout-callsign">Unassigned</div>
+
+        <ul class="readout-list">
+          <li class="readout-item">
+            <span class="readout-key">Callsign</span>
+            <span class="readout-dots" aria-hidden="true"></span>
+            <span class="readout-status" id="status-callsign">Pending</span>
+          </li>
+          <li class="readout-item">
+            <span class="readout-key">Email</span>
+            <span class="readout-dots" aria-hidden="true"></span>
+            <span class="readout-status" id="status-email">Pending</span>
+          </li>
+          <li class="readout-item">
+            <span class="readout-key">Password</span>
+            <span class="readout-dots" aria-hidden="true"></span>
+            <span class="readout-status" id="status-password">Pending</span>
+          </li>
+          <li class="readout-item">
+            <span class="readout-key">Confirm</span>
+            <span class="readout-dots" aria-hidden="true"></span>
+            <span class="readout-status" id="status-confirm">Pending</span>
+          </li>
+          <li class="readout-item">
+            <span class="readout-key">Terms</span>
+            <span class="readout-dots" aria-hidden="true"></span>
+            <span class="readout-status" id="status-terms">Required</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <!-- Brand column ends -->
+
+    <!-- Form / Success panel starts -->
+    <section class="panel" id="form-panel" aria-label="Operator registration">
+      <span class="panel-corner panel-corner--tl" aria-hidden="true"></span>
+      <span class="panel-corner panel-corner--br" aria-hidden="true"></span>
+
+      <!-- Sign-up form view -->
+      <div id="signup-view">
+        <div class="panel-header">
+          <h2 class="panel-title">New operator</h2>
+          <span class="panel-meta panel-meta--desktop">All fields required</span>
+          <span class="panel-meta panel-meta--mobile" aria-hidden="true">All required</span>
+        </div>
+
+        <form id="signup-form" novalidate>
+          <div id="form-status" class="sr-only" role="status" aria-live="assertive" aria-atomic="true"></div>
+
+          <!-- Callsign -->
+          <div class="field-group" data-field="callsign">
+            <label for="callsign" class="field-label">
+              <span class="label-prefix" aria-hidden="true">&gt;</span> Callsign
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="callsign"
+                name="callsign"
+                class="field-input"
+                placeholder="e.g. Vortex_07"
+                autocomplete="username"
+                spellcheck="false"
+                required
+                aria-required="true"
+                aria-invalid="false"
+                aria-describedby="callsign-hint callsign-error"
+              >
+              <img
+                src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%23bff538%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.667%22%20d%3D%22M16.666%205%207.5%2014.167%203.333%2010%22%2F%3E%3C%2Fsvg%3E"
+                alt=""
+                class="field-valid-icon"
+                width="20"
+                height="20"
+                aria-hidden="true"
+              >
+            </div>
+            <p id="callsign-hint" class="field-hint">3–20 characters: letters, numbers, _ or -</p>
+            <p id="callsign-error" class="field-error" hidden>
+              <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22none%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20stroke%3D%22%23ff837a%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.333%22%20d%3D%22M8%202%201.333%2014h13.333zm0%204.667V10m0%202h.007%22%2F%3E%3C%2Fsvg%3E" alt="" width="16" height="16" aria-hidden="true">
+              <span class="error-text"></span>
+            </p>
+          </div>
+
+          <!-- Email -->
+          <div class="field-group" data-field="email">
+            <label for="email" class="field-label">
+              <span class="label-prefix" aria-hidden="true">&gt;</span> Email
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="field-input"
+                placeholder="you@example.com"
+                autocomplete="email"
+                spellcheck="false"
+                required
+                aria-required="true"
+                aria-invalid="false"
+                aria-describedby="email-error"
+              >
+              <img
+                src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%23bff538%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.667%22%20d%3D%22M16.666%205%207.5%2014.167%203.333%2010%22%2F%3E%3C%2Fsvg%3E"
+                alt=""
+                class="field-valid-icon"
+                width="20"
+                height="20"
+                aria-hidden="true"
+              >
+            </div>
+            <p id="email-error" class="field-error" hidden>
+              <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22none%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20stroke%3D%22%23ff837a%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.333%22%20d%3D%22M8%202%201.333%2014h13.333zm0%204.667V10m0%202h.007%22%2F%3E%3C%2Fsvg%3E" alt="" width="16" height="16" aria-hidden="true">
+              <span class="error-text"></span>
+            </p>
+          </div>
+
+          <!-- Password -->
+          <div class="field-group" data-field="password">
+            <label for="password" class="field-label">
+              <span class="label-prefix" aria-hidden="true">&gt;</span> Password
+            </label>
+            <div class="input-wrapper input-wrapper--password">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="field-input is-masked"
+                autocomplete="new-password"
+                required
+                aria-required="true"
+                aria-invalid="false"
+                aria-describedby="password-hint password-strength-text password-caps password-error"
+              >
+              <img
+                src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%23bff538%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.667%22%20d%3D%22M16.666%205%207.5%2014.167%203.333%2010%22%2F%3E%3C%2Fsvg%3E"
+                alt=""
+                class="field-valid-icon"
+                width="20"
+                height="20"
+                aria-hidden="true"
+              >
+              <button
+                type="button"
+                class="toggle-password-btn"
+                data-target="password"
+                aria-label="Show password"
+                aria-pressed="false"
+              >
+                <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%239fadbc%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.25%22%20d%3D%22M1.667%2010s3-5.833%208.333-5.833S18.334%2010%2018.334%2010s-3%205.833-8.334%205.833S1.667%2010%201.667%2010Z%22%2F%3E%3Cpath%20stroke%3D%22%239fadbc%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.25%22%20d%3D%22m10%207.5%202.5%202.5-2.5%202.5L7.5%2010z%22%2F%3E%3C%2Fsvg%3E" alt="" width="20" height="20" class="eye-icon" aria-hidden="true">
+              </button>
+            </div>
+
+            <div class="strength-meter" id="strength-meter" aria-hidden="true">
+              <span class="strength-segment"></span>
+              <span class="strength-segment"></span>
+              <span class="strength-segment"></span>
+              <span class="strength-segment"></span>
+            </div>
+
+            <div class="password-meta-row">
+              <p id="password-hint" class="field-hint">At least 8 characters</p>
+              <p id="password-error" class="field-error" hidden>
+                <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22none%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20stroke%3D%22%23ff837a%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.333%22%20d%3D%22M8%202%201.333%2014h13.333zm0%204.667V10m0%202h.007%22%2F%3E%3C%2Fsvg%3E" alt="" width="16" height="16" aria-hidden="true">
+                <span class="error-text"></span>
+              </p>
+              <span id="password-strength-text" class="strength-label" aria-live="polite"></span>
+            </div>
+
+            <p id="password-caps" class="caps-warning" hidden>Caps Lock is on</p>
+          </div>
+
+          <!-- Confirm password -->
+          <div class="field-group" data-field="confirm">
+            <label for="confirm-password" class="field-label">
+              <span class="label-prefix" aria-hidden="true">&gt;</span> Confirm password
+            </label>
+            <div class="input-wrapper input-wrapper--password">
+              <input
+                type="password"
+                id="confirm-password"
+                name="confirmPassword"
+                class="field-input is-masked"
+                autocomplete="new-password"
+                required
+                aria-required="true"
+                aria-invalid="false"
+                aria-describedby="confirm-caps confirm-error"
+              >
+              <img
+                src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%23bff538%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.667%22%20d%3D%22M16.666%205%207.5%2014.167%203.333%2010%22%2F%3E%3C%2Fsvg%3E"
+                alt=""
+                class="field-valid-icon"
+                width="20"
+                height="20"
+                aria-hidden="true"
+              >
+              <button
+                type="button"
+                class="toggle-password-btn"
+                data-target="confirm-password"
+                aria-label="Show password confirmation"
+                aria-pressed="false"
+              >
+                <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%239fadbc%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.25%22%20d%3D%22M1.667%2010s3-5.833%208.333-5.833S18.334%2010%2018.334%2010s-3%205.833-8.334%205.833S1.667%2010%201.667%2010Z%22%2F%3E%3Cpath%20stroke%3D%22%239fadbc%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.25%22%20d%3D%22m10%207.5%202.5%202.5-2.5%202.5L7.5%2010z%22%2F%3E%3C%2Fsvg%3E" alt="" width="20" height="20" class="eye-icon" aria-hidden="true">
+              </button>
+            </div>
+            <p id="confirm-caps" class="caps-warning" hidden>Caps Lock is on</p>
+            <p id="confirm-error" class="field-error" hidden>
+              <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22none%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20stroke%3D%22%23ff837a%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.333%22%20d%3D%22M8%202%201.333%2014h13.333zm0%204.667V10m0%202h.007%22%2F%3E%3C%2Fsvg%3E" alt="" width="16" height="16" aria-hidden="true">
+              <span class="error-text"></span>
+            </p>
+          </div>
+
+          <!-- Terms -->
+          <div class="field-group field-group--terms" data-field="terms">
+            <div class="checkbox-row">
+              <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                class="terms-checkbox"
+                required
+                aria-required="true"
+                aria-invalid="false"
+                aria-describedby="terms-error"
+              >
+              <label for="terms" class="terms-label">
+                I accept the <a href="#terms" class="link-inline">Terms</a> and <a href="#privacy" class="link-inline">Privacy Policy</a>.
+              </label>
+            </div>
+            <p id="terms-error" class="field-error" hidden>
+              <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22none%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20stroke%3D%22%23ff837a%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.333%22%20d%3D%22M8%202%201.333%2014h13.333zm0%204.667V10m0%202h.007%22%2F%3E%3C%2Fsvg%3E" alt="" width="16" height="16" aria-hidden="true">
+              <span class="error-text"></span>
+            </p>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" id="submit-btn" class="btn-primary">
+            <span class="btn-text">Initialize account</span>
+          </button>
+
+          <p class="login-prompt">
+            Already an operator? <a href="#login" class="link-inline" id="login-link">Log in</a>
+          </p>
+        </form>
+      </div>
+
+      <!-- Success view -->
+      <div id="success-view" class="success-view" hidden>
+        <div class="success-icon-wrap" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="78" height="72" fill="none" viewBox="0 0 78 72" class="hex-check-svg">
+            <g stroke="#bff538" stroke-linecap="square" stroke-width="1.5" filter="url(#hex-glow)">
+              <path class="hex-outline" d="m60.866 35.8-11 19.05h-22l-11-19.05 11-19.05h22z"/>
+              <path class="hex-tick" d="m30.866 35.8 6 6 11-12"/>
+            </g>
+            <defs>
+              <filter id="hex-glow" width="80" height="80" x="-1.134" y="-4.2" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+                <feOffset/>
+                <feGaussianBlur stdDeviation="8"/>
+                <feColorMatrix values="0 0 0 0 0.74902 0 0 0 0 0.960784 0 0 0 0 0.219608 0 0 0 0.6 0"/>
+                <feBlend in2="BackgroundImageFix" result="effect1_dropShadow"/>
+                <feBlend in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+              </filter>
+            </defs>
+          </svg>
+        </div>
+
+        <h2 id="success-heading" class="success-title" tabindex="-1">
+          <span class="hero-slashes" aria-hidden="true">//</span> Handshake complete
+        </h2>
+
+        <p class="success-message">
+          Operator <span id="provisioned-callsign" class="text-lime"></span> provisioned. Your account is ready.
+        </p>
+
+        <button type="button" id="continue-btn" class="btn-primary">
+          Continue to log in
+        </button>
+      </div>
+    </section>
+    <!-- Form / Success panel ends -->
+  </main>
+
+  <footer class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank" rel="noopener noreferrer">Frontend Mentor</a>.
+    Coded by <a href="#">NEONCORE Operator</a>.
+  </footer>
+  <script>
+(() => {
+  "use strict";
+
+  const form = document.getElementById("signup-form");
+  const formPanel = document.getElementById("form-panel");
+  const signupView = document.getElementById("signup-view");
+  const successView = document.getElementById("success-view");
+  const successHeading = document.getElementById("success-heading");
+  const provisionedCallsign = document.getElementById("provisioned-callsign");
+  const continueBtn = document.getElementById("continue-btn");
+  const submitBtn = document.getElementById("submit-btn");
+  const submitBtnText = submitBtn.querySelector(".btn-text");
+  const formStatus = document.getElementById("form-status");
+
+  // Inputs
+  const callsignInput = document.getElementById("callsign");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const confirmInput = document.getElementById("confirm-password");
+  const termsCheckbox = document.getElementById("terms");
+
+  // Password strength & caps lock elements
+  const strengthMeter = document.getElementById("strength-meter");
+  const strengthLabel = document.getElementById("password-strength-text");
+  const passwordHint = document.getElementById("password-hint");
+  const callsignHint = document.getElementById("callsign-hint");
+  const passwordCaps = document.getElementById("password-caps");
+  const confirmCaps = document.getElementById("confirm-caps");
+  const toggleButtons = document.querySelectorAll(".toggle-password-btn");
+
+  // Operator ID readout elements
+  const desktopReadyCount = document.getElementById("desktop-ready-count");
+  const mobileReadyBadge = document.getElementById("mobile-ready-badge");
+  const readoutCallsign = document.getElementById("readout-callsign");
+  const statusElements = {
+    callsign: document.getElementById("status-callsign"),
+    email: document.getElementById("status-email"),
+    password: document.getElementById("status-password"),
+    confirm: document.getElementById("status-confirm"),
+    terms: document.getElementById("status-terms")
+  };
+
+  // Track which fields have been checked (blurred with content or submitted)
+  const checked = {
+    callsign: false,
+    email: false,
+    password: false,
+    confirm: false,
+    terms: false
+  };
+
+  let isSubmitting = false;
+
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const CALLSIGN_REGEX = /^[A-Za-z0-9_-]+$/;
+  const STRENGTH_LABELS = ["", "Weak", "Fair", "Good", "Strong"];
+
+  /* ========================================================================
+     Validators
+     ======================================================================== */
+  function validateCallsign() {
+    const value = callsignInput.value.trim();
+    if (!value) {
+      return { valid: false, message: "Enter a callsign", code: "Missing" };
+    }
+    if (value.length < 3) {
+      return { valid: false, message: "Use at least 3 characters", code: "Too short" };
+    }
+    if (value.length > 20) {
+      return { valid: false, message: "Use 20 characters or fewer", code: "Too long" };
+    }
+    if (!CALLSIGN_REGEX.test(value)) {
+      return { valid: false, message: "Use letters, numbers, _ or - only", code: "Bad character" };
+    }
+    return { valid: true, message: "", code: "OK" };
+  }
+
+  function validateEmail() {
+    const value = emailInput.value.trim();
+    if (!value) {
+      return { valid: false, message: "Enter your email", code: "Missing" };
+    }
+    if (!EMAIL_REGEX.test(value)) {
+      return { valid: false, message: "Enter a valid email, like you@example.com", code: "Malformed" };
+    }
+    return { valid: true, message: "", code: "OK" };
+  }
+
+  function validatePassword() {
+    const value = passwordInput.value;
+    if (!value) {
+      return { valid: false, message: "Enter a password", code: "Missing" };
+    }
+    if (value.length < 8) {
+      return { valid: false, message: "Use at least 8 characters", code: "Too short" };
+    }
+    return { valid: true, message: "", code: "OK" };
+  }
+
+  function validateConfirm() {
+    const value = confirmInput.value;
+    if (!value) {
+      return { valid: false, message: "Confirm your password", code: "Missing" };
+    }
+    if (value !== passwordInput.value) {
+      return { valid: false, message: "Passwords don't match", code: "Mismatch" };
+    }
+    return { valid: true, message: "", code: "OK" };
+  }
+
+  function validateTerms() {
+    if (!termsCheckbox.checked) {
+      return { valid: false, message: "Accept the terms to continue", code: "Required" };
+    }
+    return { valid: true, message: "", code: "OK" };
+  }
+
+  const validators = {
+    callsign: validateCallsign,
+    email: validateEmail,
+    password: validatePassword,
+    confirm: validateConfirm,
+    terms: validateTerms
+  };
+
+  const inputs = {
+    callsign: callsignInput,
+    email: emailInput,
+    password: passwordInput,
+    confirm: confirmInput,
+    terms: termsCheckbox
+  };
+
+  /* ========================================================================
+     UI State Updates
+     ======================================================================== */
+  function setFieldUI(name, result, showFeedback) {
+    const group = form.querySelector(`.field-group[data-field="${name}"]`);
+    const input = inputs[name];
+    const errorEl = document.getElementById(`${name}-error`);
+    const errorText = errorEl.querySelector(".error-text");
+
+    if (!showFeedback) {
+      group.classList.remove("is-invalid", "is-valid");
+      input.setAttribute("aria-invalid", "false");
+      errorEl.hidden = true;
+      errorText.textContent = "";
+      if (name === "callsign") callsignHint.hidden = false;
+      if (name === "password") passwordHint.hidden = false;
+      return;
+    }
+
+    if (result.valid) {
+      group.classList.remove("is-invalid");
+      group.classList.add("is-valid");
+      input.setAttribute("aria-invalid", "false");
+      errorEl.hidden = true;
+      errorText.textContent = "";
+      if (name === "callsign") callsignHint.hidden = false;
+      if (name === "password") passwordHint.hidden = false;
+    } else {
+      group.classList.remove("is-valid");
+      group.classList.add("is-invalid");
+      input.setAttribute("aria-invalid", "true");
+      errorText.textContent = result.message;
+      errorEl.hidden = false;
+      if (name === "callsign") callsignHint.hidden = true;
+      if (name === "password") passwordHint.hidden = true;
+    }
+  }
+
+  function updateOperatorReadout() {
+    let readyCount = 0;
+
+    Object.keys(validators).forEach((name) => {
+      const result = validators[name]();
+      const statusEl = statusElements[name];
+
+      if (result.valid) {
+        readyCount += 1;
+        statusEl.textContent = "OK";
+        statusEl.className = "readout-status is-ok";
+      } else if (checked[name]) {
+        statusEl.textContent = result.code;
+        statusEl.className = "readout-status is-error";
+      } else {
+        statusEl.textContent = name === "terms" ? "Required" : "Pending";
+        statusEl.className = "readout-status";
+      }
+    });
+
+    const countText = `${readyCount}/5 ready`;
+    desktopReadyCount.textContent = countText;
+    mobileReadyBadge.textContent = countText;
+    desktopReadyCount.classList.toggle("is-ready", readyCount === 5);
+    mobileReadyBadge.classList.toggle("is-ready", readyCount === 5);
+
+    const callsignResult = validateCallsign();
+    if (callsignResult.valid) {
+      readoutCallsign.textContent = callsignInput.value.trim();
+      readoutCallsign.classList.remove("is-unassigned");
+    } else {
+      readoutCallsign.textContent = "Unassigned";
+      readoutCallsign.classList.add("is-unassigned");
+    }
+  }
+
+  function checkField(name) {
+    const result = validators[name]();
+    setFieldUI(name, result, checked[name]);
+    updateOperatorReadout();
+    return result;
+  }
+
+  /* ========================================================================
+     Password Strength Meter
+     ======================================================================== */
+  function getPasswordStrength(value) {
+    if (!value) return 0;
+    if (value.length < 8) return 1;
+
+    let score = 0;
+    if (value.length >= 8) score += 1;
+    if (value.length >= 12) score += 1;
+    if (/[a-z]/.test(value) && /[A-Z]/.test(value)) score += 1;
+    if (/\d/.test(value)) score += 1;
+    if (/[^A-Za-z0-9]/.test(value)) score += 1;
+
+    return Math.min(score, 4);
+  }
+
+  function updateStrengthMeter() {
+    const score = getPasswordStrength(passwordInput.value);
+    if (score === 0) {
+      strengthMeter.removeAttribute("data-strength");
+      strengthLabel.removeAttribute("data-strength");
+      strengthLabel.textContent = "";
+    } else {
+      strengthMeter.setAttribute("data-strength", String(score));
+      strengthLabel.setAttribute("data-strength", String(score));
+      strengthLabel.textContent = STRENGTH_LABELS[score];
+    }
+  }
+
+  /* ========================================================================
+     Password Visibility & Caps Lock
+     ======================================================================== */
+  function setPasswordVisibility(btn, visible) {
+    const targetId = btn.getAttribute("data-target");
+    const input = document.getElementById(targetId);
+    const icon = btn.querySelector(".eye-icon");
+    const baseLabel = targetId === "password" ? "password" : "password confirmation";
+
+    input.type = visible ? "text" : "password";
+    input.classList.toggle("is-masked", !visible);
+    btn.setAttribute("aria-pressed", String(visible));
+    btn.setAttribute("aria-label", visible ? `Hide ${baseLabel}` : `Show ${baseLabel}`);
+    icon.src = visible ? "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%23bff538%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.25%22%20d%3D%22M8.333%204.333A7.5%207.5%200%200%201%2010%204.167c5.333%200%208.333%205.833%208.333%205.833a14.2%2014.2%200%200%201-2%202.75M5.334%205.417C3%207%201.667%2010%201.667%2010s3%205.833%208.333%205.833a8%208%200%200%200%204.334-1.333M2.5%202.5l15%2015%22%2F%3E%3C%2Fsvg%3E" : "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%239fadbc%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.25%22%20d%3D%22M1.667%2010s3-5.833%208.333-5.833S18.334%2010%2018.334%2010s-3%205.833-8.334%205.833S1.667%2010%201.667%2010Z%22%2F%3E%3Cpath%20stroke%3D%22%239fadbc%22%20stroke-linecap%3D%22square%22%20stroke-width%3D%221.25%22%20d%3D%22m10%207.5%202.5%202.5-2.5%202.5L7.5%2010z%22%2F%3E%3C%2Fsvg%3E";
+  }
+
+  toggleButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (isSubmitting) return;
+      const isPressed = btn.getAttribute("aria-pressed") === "true";
+      setPasswordVisibility(btn, !isPressed);
+    });
+  });
+
+  function handleCapsLock(event, warningEl) {
+    if (typeof event.getModifierState === "function") {
+      const capsOn = event.getModifierState("CapsLock");
+      warningEl.hidden = !capsOn;
+    }
+  }
+
+  passwordInput.addEventListener("keydown", (e) => handleCapsLock(e, passwordCaps));
+  passwordInput.addEventListener("keyup", (e) => handleCapsLock(e, passwordCaps));
+  passwordInput.addEventListener("blur", () => {
+    passwordCaps.hidden = true;
+  });
+
+  confirmInput.addEventListener("keydown", (e) => handleCapsLock(e, confirmCaps));
+  confirmInput.addEventListener("keyup", (e) => handleCapsLock(e, confirmCaps));
+  confirmInput.addEventListener("blur", () => {
+    confirmCaps.hidden = true;
+  });
+
+  /* ========================================================================
+     Field Event Listeners
+     ======================================================================== */
+  ["callsign", "email", "password", "confirm"].forEach((name) => {
+    const input = inputs[name];
+
+    input.addEventListener("blur", () => {
+      const hasContent =
+        name === "callsign" || name === "email"
+          ? input.value.trim().length > 0
+          : input.value.length > 0;
+
+      if (hasContent) {
+        checked[name] = true;
+        checkField(name);
+      }
+    });
+
+    input.addEventListener("input", () => {
+      if (name === "password") {
+        updateStrengthMeter();
+        if (checked.confirm) {
+          checkField("confirm");
+        }
+      }
+
+      if (checked[name]) {
+        checkField(name);
+      } else {
+        updateOperatorReadout();
+      }
+    });
+  });
+
+  termsCheckbox.addEventListener("change", () => {
+    if (checked.terms || termsCheckbox.checked) {
+      checkField("terms");
+    } else {
+      updateOperatorReadout();
+    }
+  });
+
+  /* ========================================================================
+     Form Submission
+     ======================================================================== */
+  function triggerShake() {
+    formPanel.classList.remove("is-shaking");
+    void formPanel.offsetWidth;
+    formPanel.classList.add("is-shaking");
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (isSubmitting) return;
+
+    const fieldOrder = ["callsign", "email", "password", "confirm", "terms"];
+    let firstInvalidInput = null;
+    let invalidCount = 0;
+
+    fieldOrder.forEach((name) => {
+      checked[name] = true;
+      const result = checkField(name);
+      if (!result.valid) {
+        invalidCount += 1;
+        if (!firstInvalidInput) {
+          firstInvalidInput = inputs[name];
+        }
+      }
+    });
+
+    if (invalidCount > 0) {
+      const noun = invalidCount === 1 ? "field needs" : "fields need";
+      formStatus.textContent = `${invalidCount} ${noun} attention`;
+      triggerShake();
+      firstInvalidInput.focus();
+      return;
+    }
+
+    // Valid submission: hide passwords, lock fields, show Transmitting_
+    isSubmitting = true;
+    formStatus.textContent = "Submitting registration";
+
+    toggleButtons.forEach((btn) => {
+      setPasswordVisibility(btn, false);
+      btn.disabled = true;
+    });
+
+    fieldOrder.forEach((name) => {
+      inputs[name].disabled = true;
+    });
+
+    submitBtn.classList.add("is-loading");
+    submitBtn.setAttribute("aria-disabled", "true");
+    submitBtnText.textContent = "Transmitting_";
+
+    window.setTimeout(() => {
+      const finalCallsign = callsignInput.value.trim();
+      provisionedCallsign.textContent = finalCallsign;
+
+      // Update Operator ID readout to Provisioned / Locked
+      desktopReadyCount.textContent = "Provisioned";
+      desktopReadyCount.classList.add("is-ready");
+      mobileReadyBadge.textContent = "Provisioned";
+      mobileReadyBadge.classList.add("is-ready");
+      readoutCallsign.textContent = finalCallsign;
+      readoutCallsign.classList.remove("is-unassigned");
+
+      Object.values(statusElements).forEach((el) => {
+        el.textContent = "Locked";
+        el.className = "readout-status is-locked";
+      });
+
+      signupView.hidden = true;
+      successView.hidden = false;
+      successHeading.focus();
+    }, 1200);
+  });
+
+  // Reset form when clicking "Continue to log in" for demo replayability
+  continueBtn.addEventListener("click", () => {
+    window.location.reload();
+  });
+
+  // Initialize readout on load
+  updateOperatorReadout();
+})();
+
+  </script>
+</body>
+</html>
